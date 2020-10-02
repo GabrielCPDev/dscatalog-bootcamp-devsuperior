@@ -1,8 +1,6 @@
 package com.gabriel.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -40,6 +38,7 @@ public class CategoryService {
 		return new CategoryDTO(entity);
 	}
 	
+	@Transactional
 	public CategoryDTO insert (CategoryDTO dto) {
 		Category entity = new Category();
 		entity.setName(dto.getName());
