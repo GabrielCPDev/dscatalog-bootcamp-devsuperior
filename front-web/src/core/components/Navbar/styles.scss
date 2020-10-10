@@ -22,9 +22,11 @@
         &.active {
             font-weight: bold;
             color: #FFF;
+            text-decoration: none;
         }
         &:hover {
             color: #FFF;
+            text-decoration: none;
         }
     }
 }
