@@ -1,7 +1,6 @@
-import { makeRequest } from 'core/utils/request';
+import { makePrivateRequest } from 'core/utils/request';
 import React, { useState } from 'react';
 import BaseForm from '../../BaseForm';
-import BaseFrom from '../../BaseForm';
 import './styles.scss';
 
 type FormState = {
@@ -34,7 +33,7 @@ const Form = () => {
             imgUrl: 'https://imagens.canaltech.com.br/ofertas/o14321.1.jpg',
             categories: [{ id: formData.category }]
         }
-        makeRequest({ url: '/products', method: 'POST', data: payLoad })
+        makePrivateRequest({ url: '/products', method: 'POST', data: payLoad })
             .then(() => {
                 setFormData({ name: '', category: '', price: '', description: '' });
             })
