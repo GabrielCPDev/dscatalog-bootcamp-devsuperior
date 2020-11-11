@@ -1,52 +1,64 @@
 import ButtonIcon from 'core/components/Buttonicon';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import AuthCard from '../Card';
 import './styles.scss';
+import { makeLogin } from 'core/utils/request';
 
 type FormData = {
-    email: string;
-    password:string;
+    username: string;
+    password: string;
 }
 const Login = () => {
-    const {register, handleSubmit} = useForm<FormData>();
+    const { register, handleSubmit } = useForm<FormData>();
+    const [hasError, setHasError] = useState(false);
 
     const onSubmit = (data: FormData) => {
-
+        makeLogin(data)
+            .then(response => {
+                setHasError(false);
+            })
+            .catch(() => {
+                setHasError(true);
+            })
     }
 
     return (
         <AuthCard title="login">
+            {hasError && (
+                <div className="alert alert-danger mt-5">
+                    Usuário ou Senha inválidos!
+                </div>
+            )}
             <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
                 <input
-                    type="email" 
-                    className="form-control input-base margin-bottom-30" 
+                    type="email"
+                    className="form-control input-base margin-bottom-30"
                     placeholder="Email"
-                    name="email"
-                    ref={register}
-                    
-                    />
+                    name="username"
+                    ref={register({ required: true })}
+                />
 
                 <input
-                    type="password" 
-                    className="form-control input-base" 
+                    type="password"
+                    className="form-control input-base"
                     placeholder="Senha"
                     name="password"
-                    ref={register}
-                    />
-                    <Link to="/admin.auth/recover" className="login-link-recover">
-                        Esqueci a senha?
+                    ref={register({ required: true })}
+                />
+                <Link to="/admin.auth/recover" className="login-link-recover">
+                    Esqueci a senha?
                     </Link>
-                    <div className="login-submit">
-                   <ButtonIcon text="logar" /> 
-                   </div>
-                   <div className="text-center">
-                       <span className="not-registered">Não tem Cadastro? </span>
-                       <Link to="/admin/auth/register" className="login-link-register">
-                       CADASTRAR
+                <div className="login-submit">
+                    <ButtonIcon text="logar" />
+                </div>
+                <div className="text-center">
+                    <span className="not-registered">Não tem Cadastro? </span>
+                    <Link to="/admin/auth/register" className="login-link-register">
+                        CADASTRAR
                        </Link>
-                   </div>
+                </div>
             </form>
         </AuthCard>
     );
