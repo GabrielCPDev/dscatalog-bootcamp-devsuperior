@@ -1,6 +1,6 @@
 import ButtonIcon from 'core/components/Buttonicon';
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import AuthCard from '../Card';
 import './styles.scss';
@@ -11,17 +11,23 @@ type FormData = {
     username: string;
     password: string;
 }
+type LocationState = {
+    from: string;
+}
 const Login = () => {
     const { register, handleSubmit, errors } = useForm<FormData>();
     const [hasError, setHasError] = useState(false);
     const history = useHistory();
+
+    const location = useLocation<LocationState>();
+    const { from } = location.state || { from: { pathname: "/admin" } };
 
     const onSubmit = (data: FormData) => {
         makeLogin(data)
             .then(response => {
                 setHasError(false);
                 saveSessionData(response.data);
-                history.push('/admin');
+                history.replace(from);
 
             })
             .catch(() => {
@@ -42,16 +48,16 @@ const Login = () => {
 
                     <input
                         type="email"
-                        className={`form-control input-base ${errors.username ? 'is-invalid' : '' }`}
+                        className={`form-control input-base ${errors.username ? 'is-invalid' : ''}`}
                         placeholder="Email"
                         name="username"
                         ref={register({
                             required: "Campo obrigatório",
                             pattern: {
-                              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                              message: "Email inválido"
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Email inválido"
                             }
-                          })}
+                        })}
                     />
 
                     {
@@ -67,13 +73,13 @@ const Login = () => {
                 <div className="margin-bottom-30">
                     <input
                         type="password"
-                        className={`form-control input-base ${errors.password ? 'is-invalid' : '' }`}
+                        className={`form-control input-base ${errors.password ? 'is-invalid' : ''}`}
                         placeholder="Senha"
                         name="password"
-                        ref={register({ required: "Campo obrigatório"})}
+                        ref={register({ required: "Campo obrigatório" })}
                     />
 
-{
+                    {
                         errors.password && (
                             <div className="invalid-feedback d-block">
                                 {errors.password.message}
