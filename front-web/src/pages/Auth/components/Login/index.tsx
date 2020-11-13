@@ -97,7 +97,7 @@ const Login = () => {
                 </div>
                 <div className="text-center">
                     <span className="not-registered">Não tem Cadastro? </span>
-                    <Link to="/admin/auth/register" className="login-link-register">
+                    <Link to="/auth/register" className="login-link-register">
                         CADASTRAR
                        </Link>
                 </div>
